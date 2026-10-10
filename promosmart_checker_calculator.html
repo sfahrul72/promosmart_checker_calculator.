@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromoSmart Checker & Calculator - Hitung Diskon Asli & Promo Terbaik</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            purple: '#7c3aed',
+                            blue: '#2563eb',
+                            orange: '#f97316'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #064e3b 100%);
+        }
+        .card-glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header Navbar -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-brand-purple flex items-center justify-center text-white font-bold text-xl shadow-md">
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold bg-gradient-to-r from-brand-600 via-brand-purple to-brand-blue bg-clip-text text-transparent">
+                            PromoSmart
+                        </span>
+                        <span class="hidden sm:inline-block text-xs font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full ml-2">v2.5</span>
+                        <p class="text-[10px] text-slate-500 font-medium -mt-1 hidden sm:block">Kalkulator & Detektor Promo Pintar Belanja Online</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs (Desktop) -->
+                <nav class="hidden md:flex space-x-1 bg-slate-100 p-1.5 rounded-xl border border-slate-200">
+                    <button onclick="switchTab('kalkulator')" id="tab-btn-kalkulator" class="tab-btn active-tab px-4 py-2 rounded-lg text-sm font-semibold transition-all">
+                        <i class="fa-solid fa-calculator mr-1.5"></i> Multi Kalkulator
+                    </button>
+                    <button onclick="switchTab('checker')" id="tab-btn-checker" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all">
+                        <i class="fa-solid fa-shield-halved mr-1.5 text-amber-500"></i> Smart Checker & S&K
+                    </button>
+                    <button onclick="switchTab('komparasi')" id="tab-btn-komparasi" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all">
+                        <i class="fa-solid fa-code-compare mr-1.5 text-blue-500"></i> Bandingkan Promo
+                    </button>
+                    <button onclick="switchTab('panduan')" id="tab-btn-panduan" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all">
+                        <i class="fa-solid fa-lightbulb mr-1.5 text-purple-500"></i> Tips Belanja
+                    </button>
+                </nav>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="resetAllCalculators()" class="text-xs font-medium text-slate-500 hover:text-rose-600 bg-slate-100 hover:bg-rose-50 px-3 py-2 rounded-lg border border-slate-200 transition-colors flex items-center gap-1">
+                        <i class="fa-solid fa-rotate-left"></i> <span class="hidden sm:inline">Reset</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Bar -->
+        <div class="md:hidden border-t border-slate-200 bg-white px-2 py-2 flex justify-around text-xs font-semibold">
+            <button onclick="switchTab('kalkulator')" id="mob-btn-kalkulator" class="mob-tab-btn flex flex-col items-center p-1.5 text-brand-600">
+                <i class="fa-solid fa-calculator text-base mb-0.5"></i> Kalkulator
+            </button>
+            <button onclick="switchTab('checker')" id="mob-btn-checker" class="mob-tab-btn flex flex-col items-center p-1.5 text-slate-500">
+                <i class="fa-solid fa-shield-halved text-base mb-0.5"></i> Checker
+            </button>
+            <button onclick="switchTab('komparasi')" id="mob-btn-komparasi" class="mob-tab-btn flex flex-col items-center p-1.5 text-slate-500">
+                <i class="fa-solid fa-code-compare text-base mb-0.5"></i> Bandingkan
+            </button>
+            <button onclick="switchTab('panduan')" id="mob-btn-panduan" class="mob-tab-btn flex flex-col items-center p-1.5 text-slate-500">
+                <i class="fa-solid fa-lightbulb text-base mb-0.5"></i> Tips
+            </button>
+        </div>
+    </header>
+
+    <!-- Top Hero Banner -->
+    <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white py-6 px-4 shadow-inner">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                    Jangan Terjebak Diskon Palsu & S&K Tersembunyi! 💡
+                </h1>
+                <p class="text-slate-300 text-sm mt-1 max-w-2xl">
+                    Hitung persentase diskon efektif sejati, perhitungkan batas maksimal (cap) cashback, hingga keputusan ongkir gratis hanya dalam beberapa detik.
+                </p>
+            </div>
+            <div class="flex gap-3 bg-white/10 p-2.5 rounded-2xl border border-white/10 text-xs">
+                <div class="text-center px-3 border-r border-white/10">
+                    <span class="block text-emerald-400 font-bold text-lg" id="stat-saved-count">Rp 0</span>
+                    <span class="text-slate-400 text-[11px]">Total Estimasi Hemat</span>
+                </div>
+                <div class="text-center px-3">
+                    <span class="block text-amber-400 font-bold text-lg" id="stat-active-promo">0 Promo</span>
+                    <span class="text-slate-400 text-[11px]">Dianalisis</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- TAB 1: KALKULATOR MULTI-PROMO -->
+        <section id="tab-kalkulator" class="tab-content block space-y-8">
+            
+            <!-- Type Sub-Selector -->
+            <div class="flex flex-wrap gap-2 pb-2 border-b border-slate-200">
+                <button onclick="switchCalcType('bertingkat')" id="sub-bertingkat" class="sub-calc-btn bg-slate-900 text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group"></i> Diskon Bertingkat (50%+20%)
+                </button>
+                <button onclick="switchCalcType('cashback')" id="sub-cashback" class="sub-calc-btn bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-coins text-amber-500"></i> Cashback vs Diskon Langsung
+                </button>
+                <button onclick="switchCalcType('buyget')" id="sub-buyget" class="sub-calc-btn bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-box-open text-purple-500"></i> Buy X Get Y / BOGO
+                </button>
+                <button onclick="switchCalcType('bundle')" id="sub-bundle" class="sub-calc-btn bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-cubes text-blue-500"></i> Paket Bundle vs Satuan
+                </button>
+                <button onclick="switchCalcType('ongkir')" id="sub-ongkir" class="sub-calc-btn bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-truck-fast text-emerald-500"></i> Threshold Bebas Ongkir
+                </button>
+            </div>
+
+            <!-- CALCULATOR 1: DISKON BERTINGKAT -->
+            <div id="calc-bertingkat" class="calc-panel grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">1</span>
+                            Kalkulator Diskon Bertingkat / Kompon
+                        </h2>
+                        <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-medium">Misal: 50% + 20% ≠ 70%</span>
+                    </div>
+
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Toko sering menggunakan istilah seperti <b>"Diskon 50% + 20%"</b>. Persentase kedua dihitung dari sisa harga setelah diskon pertama, bukan dijumlahkan langsung!
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Harga Asli Produk (Rp)</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-2.5 text-slate-400 text-sm font-medium">Rp</span>
+                                <input type="number" id="tb-harga-asli" value="200000" oninput="calculateBertingkat()" class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white text-sm font-semibold">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Diskon Pertama (%)</label>
+                            <input type="number" id="tb-diskon-1" value="50" min="0" max="100" oninput="calculateBertingkat()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white text-sm font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Diskon Kedua (%)</label>
+                            <input type="number" id="tb-diskon-2" value="20" min="0" max="100" oninput="calculateBertingkat()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white text-sm font-semibold">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Diskon Ketiga / Tambahan Voucher (%) <span class="text-slate-400 font-normal">(Opsional)</span></label>
+                            <input type="number" id="tb-diskon-3" value="0" min="0" max="100" oninput="calculateBertingkat()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white text-sm font-semibold">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center border-b border-slate-700 pb-3 mb-4">
+                            <span class="text-xs uppercase tracking-wider font-semibold text-slate-400">Hasil Analisis Diskon</span>
+                            <span id="badge-bertingkat" class="bg-emerald-500/20 text-emerald-400 text-xs px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/30">Real Discount</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-xs text-slate-400">Total Harga Bayar Akhir:</p>
+                                <p class="text-3xl font-extrabold text-emerald-400" id="res-bertingkat-bayar">Rp 80.000</p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 pt-2">
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                                    <p class="text-[11px] text-slate-400">Diskon Efektif Asli</p>
+                                    <p class="text-xl font-bold text-amber-400" id="res-bertingkat-efektif">60%</p>
+                                </div>
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                                    <p class="text-[11px] text-slate-400">Total Rupiah Hemat</p>
+                                    <p class="text-xl font-bold text-emerald-300" id="res-bertingkat-hemat">Rp 120.000</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-rose-950/40 border border-rose-800/50 p-3 rounded-xl text-xs text-rose-200">
+                                <i class="fa-solid fa-triangle-exclamation text-rose-400 mr-1"></i>
+                                Jika dikira diskon biasa <b>(50%+20% = 70%)</b>, Anda mengira bayar <b id="res-bertingkat-salah">Rp 60.000</b>. Ada selisih psikologis sebesar <b id="res-bertingkat-selisih">Rp 20.000</b>!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-700 flex justify-between items-center">
+                        <button onclick="copySummary('bertingkat')" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg font-medium transition-colors flex items-center gap-1.5 text-slate-200">
+                            <i class="fa-solid fa-copy"></i> Salin Ringkasan
+                        </button>
+                        <span class="text-[10px] text-slate-400">PromoSmart Engine</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALCULATOR 2: CASHBACK VS DISKON DIRECT -->
+            <div id="calc-cashback" class="calc-panel hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold">2</span>
+                            Cashback Koin/Poin vs Diskon Langsung
+                        </h2>
+                        <span class="text-xs bg-amber-50 text-amber-700 px-2.5 py-1 rounded-full font-medium">Hitung Batas Max Cap</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Total Nilai Keranjang / Harga Produk (Rp)</label>
+                            <input type="number" id="cb-harga" value="500000" oninput="calculateCashback()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 text-sm font-semibold">
+                        </div>
+
+                        <!-- Opsi A: Promo Cashback -->
+                        <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-200 space-y-3">
+                            <h3 class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1">
+                                <i class="fa-solid fa-coins"></i> Opsi A: Promo Cashback
+                            </h3>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-600 mb-1">Persentase Cashback (%)</label>
+                                <input type="number" id="cb-persen-a" value="30" oninput="calculateCashback()" class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm font-semibold">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-600 mb-1">Maksimal Cashback Cap (Rp)</label>
+                                <input type="number" id="cb-cap-a" value="30000" oninput="calculateCashback()" class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm font-semibold">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-600 mb-1">Faktor Nilai Riil Koin (%)</label>
+                                <select id="cb-faktor-a" onchange="calculateCashback()" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold">
+                                    <option value="1.0">100% (Dipakai belanja hal penting)</option>
+                                    <option value="0.8" selected>80% (Terikat merchant / ada expired)</option>
+                                    <option value="0.5">50% (Sering hangus / jarang dipakai)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Opsi B: Promo Diskon Langsung -->
+                        <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-200 space-y-3">
+                            <h3 class="text-xs font-bold text-blue-900 uppercase tracking-wider flex items-center gap-1">
+                                <i class="fa-solid fa-tag"></i> Opsi B: Diskon Langsung
+                            </h3>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-600 mb-1">Persentase Diskon (%)</label>
+                                <input type="number" id="cb-persen-b" value="10" oninput="calculateCashback()" class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm font-semibold">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-600 mb-1">Maksimal Diskon Cap (Rp)</label>
+                                <input type="number" id="cb-cap-b" value="100000" oninput="calculateCashback()" class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm font-semibold">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Box Cashback -->
+                <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-indigo-950 text-white p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center border-b border-slate-700 pb-3 mb-4">
+                            <span class="text-xs uppercase tracking-wider font-semibold text-slate-400">Rekomendasi Hemat</span>
+                            <span id="badge-cashback-winner" class="bg-amber-500/20 text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-500/30">Opsi A Lebih Untung</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                                    <p class="text-[11px] text-amber-400 font-semibold">Nilai Efektif Cashback A</p>
+                                    <p class="text-lg font-bold text-white" id="res-cb-val-a">Rp 24.000</p>
+                                    <p class="text-[10px] text-slate-400 mt-1" id="res-cb-note-a">Mencapai Max Cap 30rb</p>
+                                </div>
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                                    <p class="text-[11px] text-blue-400 font-semibold">Hemat Diskon Direct B</p>
+                                    <p class="text-lg font-bold text-white" id="res-cb-val-b">Rp 50.000</p>
+                                    <p class="text-[10px] text-slate-400 mt-1" id="res-cb-note-b">Potongan Tunai Langsung</p>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl bg-indigo-900/40 border border-indigo-700/50 text-xs leading-relaxed" id="res-cb-verdict">
+                                💡 **Kesimpulan:** Walau Promo Cashback terlihat menggiurkan (30%), karena dibatasi cap **Rp 30.000**, maka **Diskon Langsung 10% (Hemat Rp 50.000)** memberikan keuntungan nyata lebih besar!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-700 flex justify-between items-center">
+                        <button onclick="copySummary('cashback')" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg font-medium transition-colors flex items-center gap-1.5 text-slate-200">
+                            <i class="fa-solid fa-copy"></i> Salin Ringkasan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALCULATOR 3: BUY X GET Y / BOGO -->
+            <div id="calc-buyget" class="calc-panel hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center text-sm font-bold">3</span>
+                            Kalkulator Buy X Get Y / Buy 1 Get 1
+                        </h2>
+                        <span class="text-xs bg-purple-50 text-purple-700 px-2.5 py-1 rounded-full font-medium">Hitung Harga per Unit Real</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Jumlah Beli Utama (X)</label>
+                            <input type="number" id="bg-x" value="2" min="1" oninput="calculateBuyGet()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-purple-500 text-sm font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Jumlah Gratisan (Y)</label>
+                            <input type="number" id="bg-y" value="1" min="1" oninput="calculateBuyGet()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-purple-500 text-sm font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Harga Satuan Barang Beli (Rp)</label>
+                            <input type="number" id="bg-harga-x" value="150000" oninput="calculateBuyGet()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-purple-500 text-sm font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Harga Normal Barang Gratisan (Rp)</label>
+                            <input type="number" id="bg-harga-y" value="150000" oninput="calculateBuyGet()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-purple-500 text-sm font-semibold">
+                            <p class="text-[10px] text-slate-400 mt-1">*Sama jika promo BOGO produk identik</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Box Buy Get -->
+                <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-purple-950 text-white p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center border-b border-slate-700 pb-3 mb-4">
+                            <span class="text-xs uppercase tracking-wider font-semibold text-slate-400">Analisis Harga per Unit</span>
+                            <span class="bg-purple-500/20 text-purple-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-purple-500/30">Total <span id="res-bg-total-item">3</span> Item</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-xs text-slate-400">Harga Rata-Rata per Barang Sebenarnya:</p>
+                                <p class="text-3xl font-extrabold text-purple-300" id="res-bg-unit-price">Rp 100.000</p>
+                                <p class="text-xs text-emerald-400 font-medium mt-0.5" id="res-bg-effective-disc">Setara Diskon 33.3% per item</p>
+                            </div>
+
+                            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-1.5 text-xs">
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Total Bayar Kasir:</span>
+                                    <span class="font-bold text-white" id="res-bg-total-bayar">Rp 300.000</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Total Value Barang Diterima:</span>
+                                    <span class="font-bold text-slate-200" id="res-bg-total-value">Rp 450.000</span>
+                                </div>
+                                <div class="flex justify-between text-emerald-400 font-bold border-t border-slate-700 pt-1">
+                                    <span>Total Value Hemat:</span>
+                                    <span id="res-bg-total-hemat">Rp 150.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-700 flex justify-between items-center">
+                        <button onclick="copySummary('buyget')" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg font-medium transition-colors flex items-center gap-1.5 text-slate-200">
+                            <i class="fa-solid fa-copy"></i> Salin Ringkasan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALCULATOR 4: BUNDLE VS SINGLE ITEM -->
+            <div id="calc-bundle" class="calc-panel hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-bold">4</span>
+                            Komparasi Paket Bundle vs Beli Eceran
+                        </h2>
+                        <span class="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-medium">Apakah Paket Lebih Murah?</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Harga Paket Bundle (Rp)</label>
+                            <input type="number" id="bd-harga-bundle" value="250000" oninput="calculateBundle()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 text-sm font-semibold">
+                        </div>
+
+                        <div class="sm:col-span-2 border-t pt-2">
+                            <p class="text-xs font-bold text-slate-700 mb-2">Harga Jika Dibeli Terpisah / Eceran:</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Item 1 (Rp)</label>
+                            <input type="number" id="bd-item-1" value="120000" oninput="calculateBundle()" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Item 2 (Rp)</label>
+                            <input type="number" id="bd-item-2" value="100000" oninput="calculateBundle()" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Item 3 (Rp) <span class="text-slate-400">(Opsional)</span></label>
+                            <input type="number" id="bd-item-3" value="70000" oninput="calculateBundle()" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Item 4 (Rp) <span class="text-slate-400">(Opsional)</span></label>
+                            <input type="number" id="bd-item-4" value="0" oninput="calculateBundle()" class="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Box Bundle -->
+                <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-blue-950 text-white p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center border-b border-slate-700 pb-3 mb-4">
+                            <span class="text-xs uppercase tracking-wider font-semibold text-slate-400">Hasil Evaluasi Paket</span>
+                            <span id="badge-bundle" class="bg-blue-500/20 text-blue-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-blue-500/30">Paket Worth It</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                                    <p class="text-[11px] text-slate-400">Total Beli Eceran</p>
+                                    <p class="text-xl font-bold text-slate-200" id="res-bd-total-eceran">Rp 290.000</p>
+                                </div>
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+                                    <p class="text-[11px] text-blue-400">Harga Paket Bundle</p>
+                                    <p class="text-xl font-bold text-white" id="res-bd-harga-paket">Rp 250.000</p>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl bg-blue-900/40 border border-blue-700/50 text-xs leading-relaxed" id="res-bd-summary">
+                                🎉 <b>Lebih Hemat Rp 40.000 (13.8%)</b> dibanding beli eceran satu per satu!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-700 flex justify-between items-center">
+                        <button onclick="copySummary('bundle')" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg font-medium transition-colors flex items-center gap-1.5 text-slate-200">
+                            <i class="fa-solid fa-copy"></i> Salin Ringkasan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALCULATOR 5: FREE SHIPPING THRESHOLD TOP-UP -->
+            <div id="calc-ongkir" class="calc-panel hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">5</span>
+                            Threshold Bebas Ongkir (Haruskah Tambah Barang?)
+                        </h2>
+                        <span class="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full font-medium">Bantu Keputusan Beli</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Total Keranjang Saat Ini (Rp)</label>
+                            <input type="number" id="og-keranjang" value="135000" oninput="calculateOngkir()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 text-sm font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Minimal Belanja Bebas Ongkir (Rp)</label>
+                            <input type="number" id="og-min-belanja" value="150000" oninput="calculateOngkir()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 text-sm font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Biaya Ongkir Normal (Rp)</label>
+                            <input type="number" id="og-biaya-ongkir" value="25000" oninput="calculateOngkir()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 text-sm font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Subsidi Ongkir Maksimal (Rp)</label>
+                            <input type="number" id="og-subsidi" value="20000" oninput="calculateOngkir()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 text-sm font-semibold">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Box Ongkir -->
+                <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-emerald-950 text-white p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center border-b border-slate-700 pb-3 mb-4">
+                            <span class="text-xs uppercase tracking-wider font-semibold text-slate-400">Keputusan Top-Up</span>
+                            <span id="badge-ongkir" class="bg-emerald-500/20 text-emerald-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/30">Tambah Barang!</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-xs text-slate-400">Kekurangan untuk Bebas Ongkir:</p>
+                                <p class="text-3xl font-extrabold text-amber-400" id="res-og-kurang">Rp 15.000</p>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl bg-slate-800/90 border border-slate-700 space-y-2 text-xs">
+                                <p id="res-og-recommendation" class="font-semibold text-emerald-300 leading-relaxed">
+                                    💡 <b>Rekomendasi:</b> Tambah barang berguna seharga <b>Rp 15.000</b>. Daripada uang Rp 20.000 hangus untuk bayar ongkir tanpa dapat barang!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-700 flex justify-between items-center">
+                        <button onclick="copySummary('ongkir')" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg font-medium transition-colors flex items-center gap-1.5 text-slate-200">
+                            <i class="fa-solid fa-copy"></i> Salin Ringkasan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- TAB 2: SMART CHECKER & FAKE DISCOUNT DETECTOR -->
+        <section id="tab-checker" class="tab-content hidden space-y-8">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Column: Fake Discount Calculator -->
+                <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex items-center justify-between border-b pb-3">
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass-dollar text-amber-500"></i>
+                            Detektor Diskon Palsu / Mark-Up Harga
+                        </h2>
+                        <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-semibold">Anti-Scam</span>
+                    </div>
+
+                    <p class="text-xs text-slate-500">
+                        Bandingkan harga yang dicoret oleh penjual dengan harga wajar pasar / harga riil sebelum promo untuk mendeteksi apakah harga dinaikkan terlebih dahulu (Mark-up).
+                    </p>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Harga yang Dicoret di Toko (Disebut Harga Awal) (Rp)</label>
+                            <input type="number" id="chk-harga-coret" value="500000" oninput="runSmartChecker()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 text-sm font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Harga Setelah Diskon / Harga Promo (Rp)</label>
+                            <input type="number" id="chk-harga-promo" value="250000" oninput="runSmartChecker()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 text-sm font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Harga Pasar Wajar / Harga Historis Asli (Rp)</label>
+                            <input type="number" id="chk-harga-pasar" value="270000" oninput="runSmartChecker()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 text-sm font-semibold">
+                            <p class="text-[10px] text-slate-400 mt-1">*Estimasi harga biasa toko lain / harga bulan lalu</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Verification Results -->
+                <div id="chk-result-card" class="lg:col-span-5 bg-slate-900 text-white p-6 rounded-2xl shadow-xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center border-b border-slate-700 pb-3 mb-4">
+                            <span class="text-xs uppercase tracking-wider font-semibold text-slate-400">Status Keaslian Diskon</span>
+                            <span id="chk-badge" class="bg-emerald-500/20 text-emerald-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/30">Diskon Nyata</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-xs text-slate-400">Klaim Toko vs Realita Diskon:</p>
+                                <div class="flex items-baseline gap-2 mt-1">
+                                    <span class="text-2xl font-extrabold text-slate-400 line-through" id="chk-klaim-persen">50%</span>
+                                    <span class="text-3xl font-extrabold text-amber-400" id="chk-real-persen">7.4%</span>
+                                    <span class="text-xs text-slate-400">(Diskon Sebenarnya)</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-800 p-3.5 rounded-xl border border-slate-700 space-y-2 text-xs">
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Penggelembutan Harga (Mark-up):</span>
+                                    <span class="font-bold text-rose-400" id="chk-markup-val">+85.2%</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-400">Hemat Sebenarnya dari Harga Pasar:</span>
+                                    <span class="font-bold text-emerald-400" id="chk-real-hemat">Rp 20.000</span>
+                                </div>
+                            </div>
+
+                            <div id="chk-verdict-box" class="p-3 rounded-xl bg-amber-950/50 border border-amber-700/50 text-xs text-amber-200 leading-relaxed">
+                                ⚠️ <b>Peringatan:</b> Toko menaikkan harga hingga Rp 500.000 agar terlihat diskon 50%. Hemat Anda sebenarnya hanya Rp 20.000 dari harga wajar!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-700 text-right">
+                        <span class="text-[10px] text-slate-400">Smart Fraud Detector</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive T&C Checklist Detector -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b pb-3">
+                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-brand-purple"></i>
+                        Checklist Ketentuan Tersembunyi (S&K Trap Detector)
+                    </h3>
+                    <span class="text-xs text-slate-500">Centang yang berlaku pada voucher Anda</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="tnc-checklist">
+                    <!-- Dynamic Checkboxes -->
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="checkbox" onchange="evaluateTnc()" class="tnc-item mt-1 rounded text-brand-purple focus:ring-brand-purple w-4 h-4" data-risk="high" data-msg="Cashback berupa Koin/Poin terikat yang sulit ditarik tunai.">
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 block">Cashback Koin / Non-Tunai</span>
+                            <span class="text-[11px] text-slate-500">Bukan potongan harga langsung saat bayar</span>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="checkbox" onchange="evaluateTnc()" class="tnc-item mt-1 rounded text-brand-purple focus:ring-brand-purple w-4 h-4" data-risk="high" data-msg="Ada batas maksimal diskon yang sangat kecil dibanding persentase promo.">
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 block">Cap Maksimal Sangat Kecil</span>
+                            <span class="text-[11px] text-slate-500">Misal Diskon 90% tapi max cuma Rp 5.000</span>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="checkbox" onchange="evaluateTnc()" class="tnc-item mt-1 rounded text-brand-purple focus:ring-brand-purple w-4 h-4" data-risk="medium" data-msg="Terkunci hanya untuk pembayaran e-wallet tertentu.">
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 block">Kunci Metode Pembayaran</span>
+                            <span class="text-[11px] text-slate-500">Hanya bisa PayLater / E-Wallet tertentu</span>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="checkbox" onchange="evaluateTnc()" class="tnc-item mt-1 rounded text-brand-purple focus:ring-brand-purple w-4 h-4" data-risk="medium" data-msg="Voucher hangus dalam kurun waktu sangat singkat.">
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 block">Masa Kadaluarsa Singkat</span>
+                            <span class="text-[11px] text-slate-500">Kadaluarsa dalam < 24 jam / hari ini</span>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="checkbox" onchange="evaluateTnc()" class="tnc-item mt-1 rounded text-brand-purple focus:ring-brand-purple w-4 h-4" data-risk="medium" data-msg="Hanya berlaku untuk produk / toko bertanda khusus.">
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 block">Eksklusi Kategori / Toko</span>
+                            <span class="text-[11px] text-slate-500">Tidak berlaku untuk official store / digital</span>
+                        </div>
+                    </label>
+
+                    <label class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition-colors">
+                        <input type="checkbox" onchange="evaluateTnc()" class="tnc-item mt-1 rounded text-brand-purple focus:ring-brand-purple w-4 h-4" data-risk="low" data-msg="Non-refundable jika ada pembatalan pesanan.">
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 block">Voucher Hangus Jika Batal</span>
+                            <span class="text-[11px] text-slate-500">Tidak dikembalikan jika pesanan dibatalkan</span>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- T&C Assessment Score -->
+                <div id="tnc-score-box" class="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div id="tnc-score-icon" class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-800" id="tnc-score-title">Tingkat Risiko S&K: Aman / Transparan</p>
+                            <p class="text-[11px] text-slate-500" id="tnc-score-desc">Belum ada syarat jebakan terdeteksi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- TAB 3: PERBANDINGAN PROMO SIDE-BY-SIDE -->
+        <section id="tab-komparasi" class="tab-content hidden space-y-6">
+            
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b pb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-code-compare text-blue-600"></i>
+                            Matriks Perbandingan Promo Side-by-Side
+                        </h2>
+                        <p class="text-xs text-slate-500">Bandingkan hingga 3 opsi promo sekaligus untuk menentukan yang paling menguntungkan.</p>
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-slate-600 mr-2">Harga Total Belanja:</label>
+                        <input type="number" id="cmp-total-harga" value="300000" oninput="updateComparisonMatrix()" class="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-sm font-bold text-brand-600 w-36">
+                    </div>
+                </div>
+
+                <!-- Comparison Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[600px]">
+                        <thead>
+                            <tr class="border-b border-slate-200 bg-slate-50/50">
+                                <th class="p-3 text-xs font-bold text-slate-500 uppercase">Fitur / Parameter</th>
+                                <th class="p-3 text-xs font-bold text-slate-800 bg-emerald-50/50 rounded-t-xl text-center">Promo A (Direct)</th>
+                                <th class="p-3 text-xs font-bold text-slate-800 bg-amber-50/50 rounded-t-xl text-center">Promo B (Cashback)</th>
+                                <th class="p-3 text-xs font-bold text-slate-800 bg-purple-50/50 rounded-t-xl text-center">Promo C (Bundle/BOGO)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-xs font-medium">
+                            <tr>
+                                <td class="p-3 text-slate-600 font-semibold">Tipe Promo</td>
+                                <td class="p-3 text-center">
+                                    <select id="cmp-type-a" onchange="updateComparisonMatrix()" class="w-full text-xs p-1.5 border rounded-md">
+                                        <option value="direct">Diskon Langsung %</option>
+                                    </select>
+                                </td>
+                                <td class="p-3 text-center">
+                                    <select id="cmp-type-b" onchange="updateComparisonMatrix()" class="w-full text-xs p-1.5 border rounded-md">
+                                        <option value="cashback">Cashback Koin %</option>
+                                    </select>
+                                </td>
+                                <td class="p-3 text-center">
+                                    <select id="cmp-type-c" onchange="updateComparisonMatrix()" class="w-full text-xs p-1.5 border rounded-md">
+                                        <option value="nominal">Potongan Nominal Rp</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 text-slate-600 font-semibold">Nilai Angka (% / Rp)</td>
+                                <td class="p-3 text-center">
+                                    <input type="number" id="cmp-val-a" value="20" oninput="updateComparisonMatrix()" class="w-20 text-center border p-1 rounded"> %
+                                </td>
+                                <td class="p-3 text-center">
+                                    <input type="number" id="cmp-val-b" value="30" oninput="updateComparisonMatrix()" class="w-20 text-center border p-1 rounded"> %
+                                </td>
+                                <td class="p-3 text-center">
+                                    Rp <input type="number" id="cmp-val-c" value="45000" oninput="updateComparisonMatrix()" class="w-24 text-center border p-1 rounded">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 text-slate-600 font-semibold">Maksimal Cap (Rp)</td>
+                                <td class="p-3 text-center">
+                                    Rp <input type="number" id="cmp-cap-a" value="50000" oninput="updateComparisonMatrix()" class="w-24 text-center border p-1 rounded">
+                                </td>
+                                <td class="p-3 text-center">
+                                    Rp <input type="number" id="cmp-cap-b" value="25000" oninput="updateComparisonMatrix()" class="w-24 text-center border p-1 rounded">
+                                </td>
+                                <td class="p-3 text-center text-slate-400">N/A (Fixed)</td>
+                            </tr>
+                            <tr class="bg-slate-50/80 font-bold">
+                                <td class="p-3 text-slate-800">Total Penghematan Riil</td>
+                                <td class="p-3 text-center text-emerald-600 text-sm" id="cmp-res-save-a">Rp 50.000</td>
+                                <td class="p-3 text-center text-amber-600 text-sm" id="cmp-res-save-b">Rp 25.000</td>
+                                <td class="p-3 text-center text-purple-600 text-sm" id="cmp-res-save-c">Rp 45.000</td>
+                            </tr>
+                            <tr class="font-bold">
+                                <td class="p-3 text-slate-800">Total Bayar Akhir</td>
+                                <td class="p-3 text-center text-slate-900" id="cmp-res-pay-a">Rp 250.000</td>
+                                <td class="p-3 text-center text-slate-900" id="cmp-res-pay-b">Rp 275.000</td>
+                                <td class="p-3 text-center text-slate-900" id="cmp-res-pay-c">Rp 255.000</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 text-slate-600 font-semibold">Rekomendasi Matriks</td>
+                                <td class="p-3 text-center" id="cmp-rec-a">
+                                    <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full text-[10px] font-extrabold">BEST CHOICE ⭐</span>
+                                </td>
+                                <td class="p-3 text-center" id="cmp-rec-b">
+                                    <span class="text-slate-400 text-[10px]">Terpotong Cap</span>
+                                </td>
+                                <td class="p-3 text-center" id="cmp-rec-c">
+                                    <span class="text-slate-400 text-[10px]">Opsi Kedua</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- TAB 4: PANDUAN & TIPS BELANJA SMART -->
+        <section id="tab-panduan" class="tab-content hidden space-y-6">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800">Jebakan Psikologi Diskon Bertingkat</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Promo 70% + 20% tidak sama dengan 90%. Diskon kedua hanya memotong sisa harga dari diskon pertama. Selalu hitung menggunakan PromoSmart untuk mengetahui persentase bersihnya.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800">Cashback vs Potongan Direct</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Potongan harga langsung selalu lebih disukai daripada cashback poin. Poin terikat pada sistem reward merchant, memiliki masa berlaku, dan tidak bisa dicairkan ke rekening bank.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800">Trik Bebas Ongkir Top-Up</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Jika belanjaan Anda kurang sedikit dari batas bebas ongkir, tambahkan barang kebutuhan pokok murah (misal: tisu, kosmetik kecil, baterai) daripada membayar ongkir secara cuma-cuma.
+                    </p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800">Waspada Mark-Up Flash Sale</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Beberapa penjual menggelembungkan harga normal beberapa hari sebelum promo besar (11.11 / Harbolnas). Selalu cek harga wajar pasar sebelum tergiur klaim diskon 80%.
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-20 opacity-0 z-50 text-xs">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-message">Ringkasan berhasil disalin!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p class="font-semibold text-slate-700">PromoSmart Checker & Calculator © 2026</p>
+            <p class="text-[11px] text-slate-400">Dirancang untuk konsumen cerdas e-commerce Indonesia (Shopee, Tokopedia, Lazada, TikTok Shop, Blibli).</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Currency Formatter
+        function formatRp(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            // Desktop Tab Active Styles
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
+                btn.classList.add('text-slate-600');
+            });
+            const activeDesktopBtn = document.getElementById('tab-btn-' + tabId);
+            if(activeDesktopBtn) {
+                activeDesktopBtn.classList.add('bg-white', 'shadow-sm', 'text-slate-900');
+                activeDesktopBtn.classList.remove('text-slate-600');
+            }
+
+            // Mobile Tab Active Styles
+            document.querySelectorAll('.mob-tab-btn').forEach(btn => {
+                btn.classList.remove('text-brand-600');
+                btn.classList.add('text-slate-500');
+            });
+            const activeMobBtn = document.getElementById('mob-btn-' + tabId);
+            if(activeMobBtn) {
+                activeMobBtn.classList.add('text-brand-600');
+                activeMobBtn.classList.remove('text-slate-500');
+            }
+        }
+
+        // Calculator Type Sub-Switching
+        function switchCalcType(calcType) {
+            document.querySelectorAll('.calc-panel').forEach(panel => panel.classList.add('hidden'));
+            document.getElementById('calc-' + calcType).classList.remove('hidden');
+
+            document.querySelectorAll('.sub-calc-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-900', 'text-white', 'shadow-sm');
+                btn.classList.add('bg-white', 'text-slate-700', 'hover:bg-slate-100');
+            });
+
+            const activeSubBtn = document.getElementById('sub-' + calcType);
+            if(activeSubBtn) {
+                activeSubBtn.classList.add('bg-slate-900', 'text-white', 'shadow-sm');
+                activeSubBtn.classList.remove('bg-white', 'text-slate-700', 'hover:bg-slate-100');
+            }
+        }
+
+        // --- 1. DISKON BERTINGKAT CALCULATOR ---
+        function calculateBertingkat() {
+            const harga = parseFloat(document.getElementById('tb-harga-asli').value) || 0;
+            const d1 = parseFloat(document.getElementById('tb-diskon-1').value) || 0;
+            const d2 = parseFloat(document.getElementById('tb-diskon-2').value) || 0;
+            const d3 = parseFloat(document.getElementById('tb-diskon-3').value) || 0;
+
+            let sisa = harga;
+            sisa = sisa - (sisa * (d1 / 100));
+            sisa = sisa - (sisa * (d2 / 100));
+            sisa = sisa - (sisa * (d3 / 100));
+
+            const totalHemat = harga - sisa;
+            const persenEfektif = harga > 0 ? (totalHemat / harga) * 100 : 0;
+
+            const diskonSalahSum = d1 + d2 + d3;
+            const bayarSalah = harga - (harga * (diskonSalahSum / 100));
+            const selisihPsikologis = sisa - (bayarSalah < 0 ? 0 : bayarSalah);
+
+            document.getElementById('res-bertingkat-bayar').innerText = formatRp(sisa);
+            document.getElementById('res-bertingkat-efektif').innerText = persenEfektif.toFixed(1) + '%';
+            document.getElementById('res-bertingkat-hemat').innerText = formatRp(totalHemat);
+            document.getElementById('res-bertingkat-salah').innerText = formatRp(bayarSalah < 0 ? 0 : bayarSalah);
+            document.getElementById('res-bertingkat-selisih').innerText = formatRp(selisihPsikologis);
+
+            updateGlobalStats(totalHemat);
+        }
+
+        // --- 2. CASHBACK VS DIRECT CALCULATOR ---
+        function calculateCashback() {
+            const harga = parseFloat(document.getElementById('cb-harga').value) || 0;
+            
+            // Opsi A
+            const pA = parseFloat(document.getElementById('cb-persen-a').value) || 0;
+            const capA = parseFloat(document.getElementById('cb-cap-a').value) || 0;
+            const faktorA = parseFloat(document.getElementById('cb-faktor-a').value) || 1.0;
+
+            let rawCbA = harga * (pA / 100);
+            if (capA > 0 && rawCbA > capA) rawCbA = capA;
+            const realValA = rawCbA * faktorA;
+
+            // Opsi B
+            const pB = parseFloat(document.getElementById('cb-persen-b').value) || 0;
+            const capB = parseFloat(document.getElementById('cb-cap-b').value) || 0;
+
+            let realValB = harga * (pB / 100);
+            if (capB > 0 && realValB > capB) realValB = capB;
+
+            document.getElementById('res-cb-val-a').innerText = formatRp(realValA);
+            document.getElementById('res-cb-val-b').innerText = formatRp(realValB);
+
+            document.getElementById('res-cb-note-a').innerText = rawCbA >= capA && capA > 0 ? `Terpotong Max Cap ${formatRp(capA)}` : 'Sesuai persentase full';
+            document.getElementById('res-cb-note-b').innerText = realValB >= capB && capB > 0 ? `Terpotong Max Cap ${formatRp(capB)}` : 'Potongan Tunai Langsung';
+
+            const winnerBadge = document.getElementById('badge-cashback-winner');
+            const verdict = document.getElementById('res-cb-verdict');
+
+            if (realValB > realValA) {
+                winnerBadge.innerText = 'Opsi B (Direct) Lebih Untung';
+                winnerBadge.className = 'bg-blue-500/20 text-blue-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-blue-500/30';
+                verdict.innerHTML = `💡 <b>Rekomendasi:</b> Gunakan <b>Opsi B (Diskon Langsung)</b>. Anda menghemat bersih <b>${formatRp(realValB)}</b> secara tunai tanpa terikat koin!`;
+            } else if (realValA > realValB) {
+                winnerBadge.innerText = 'Opsi A (Cashback) Lebih Untung';
+                winnerBadge.className = 'bg-amber-500/20 text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-500/30';
+                verdict.innerHTML = `🎉 <b>Rekomendasi:</b> Gunakan <b>Opsi A (Cashback)</b>. Nilai poin/koin efektif yang didapat (setara <b>${formatRp(realValA)}</b>) lebih tinggi dibanding Opsi B.`;
+            } else {
+                winnerBadge.innerText = 'Keduanya Setara';
+                winnerBadge.className = 'bg-slate-500/20 text-slate-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-slate-500/30';
+                verdict.innerHTML = `⚖️ Kedua opsi memberikan nilai penghematan riil yang sama yaitu <b>${formatRp(realValA)}</b>. Disarankan pilih Diskon Langsung agar lebih fleksibel.`;
+            }
+        }
+
+        // --- 3. BUY X GET Y CALCULATOR ---
+        function calculateBuyGet() {
+            const x = parseInt(document.getElementById('bg-x').value) || 1;
+            const y = parseInt(document.getElementById('bg-y').value) || 1;
+            const hx = parseFloat(document.getElementById('bg-harga-x').value) || 0;
+            const hy = parseFloat(document.getElementById('bg-harga-y').value) || 0;
+
+            const totalBayar = x * hx;
+            const totalItem = x + y;
+            const totalValue = (x * hx) + (y * hy);
+            const totalHemat = totalValue - totalBayar;
+            const unitPriceEff = totalItem > 0 ? totalBayar / totalItem : 0;
+            const discEff = totalValue > 0 ? (totalHemat / totalValue) * 100 : 0;
+
+            document.getElementById('res-bg-total-item').innerText = totalItem;
+            document.getElementById('res-bg-unit-price').innerText = formatRp(unitPriceEff);
+            document.getElementById('res-bg-effective-disc').innerText = `Setara Diskon ${discEff.toFixed(1)}% per item`;
+            document.getElementById('res-bg-total-bayar').innerText = formatRp(totalBayar);
+            document.getElementById('res-bg-total-value').innerText = formatRp(totalValue);
+            document.getElementById('res-bg-total-hemat').innerText = formatRp(totalHemat);
+        }
+
+        // --- 4. BUNDLE VS SINGLE CALCULATOR ---
+        function calculateBundle() {
+            const hBundle = parseFloat(document.getElementById('bd-harga-bundle').value) || 0;
+            const i1 = parseFloat(document.getElementById('bd-item-1').value) || 0;
+            const i2 = parseFloat(document.getElementById('bd-item-2').value) || 0;
+            const i3 = parseFloat(document.getElementById('bd-item-3').value) || 0;
+            const i4 = parseFloat(document.getElementById('bd-item-4').value) || 0;
+
+            const totalEceran = i1 + i2 + i3 + i4;
+            const selisih = totalEceran - hBundle;
+            const persenSave = totalEceran > 0 ? (selisih / totalEceran) * 100 : 0;
+
+            document.getElementById('res-bd-total-eceran').innerText = formatRp(totalEceran);
+            document.getElementById('res-bd-harga-paket').innerText = formatRp(hBundle);
+
+            const badge = document.getElementById('badge-bundle');
+            const summary = document.getElementById('res-bd-summary');
+
+            if (selisih > 0) {
+                badge.innerText = 'Paket Worth It';
+                badge.className = 'bg-blue-500/20 text-blue-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-blue-500/30';
+                summary.innerHTML = `🎉 <b>Lebih Hemat ${formatRp(selisih)} (${persenSave.toFixed(1)}%)</b> dibanding beli eceran satu per satu!`;
+            } else if (selisih < 0) {
+                badge.innerText = 'Beli Eceran Saja!';
+                badge.className = 'bg-rose-500/20 text-rose-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-rose-500/30';
+                summary.innerHTML = `⚠️ <b>Rugi! Paket Bundle lebih mahal ${formatRp(Math.abs(selisih))}</b> daripada membeli barang secara eceran terpisah.`;
+            } else {
+                badge.innerText = 'Harga Sama';
+                badge.className = 'bg-slate-500/20 text-slate-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-slate-500/30';
+                summary.innerHTML = `Harga Paket Bundle persis sama dengan total pembelian eceran.`;
+            }
+        }
+
+        // --- 5. BEBAS ONGKIR THRESHOLD CALCULATOR ---
+        function calculateOngkir() {
+            const keranjang = parseFloat(document.getElementById('og-keranjang').value) || 0;
+            const minBelanja = parseFloat(document.getElementById('og-min-belanja').value) || 0;
+            const ongkirNormal = parseFloat(document.getElementById('og-biaya-ongkir').value) || 0;
+            const subsidiMax = parseFloat(document.getElementById('og-subsidi').value) || 0;
+
+            const kekurangan = Math.max(0, minBelanja - keranjang);
+            const efektivitasOngkir = Math.min(ongkirNormal, subsidiMax);
+
+            document.getElementById('res-og-kurang').innerText = formatRp(kekurangan);
+
+            const badge = document.getElementById('badge-ongkir');
+            const rec = document.getElementById('res-og-recommendation');
+
+            if (kekurangan === 0) {
+                badge.innerText = 'Sudah Bebas Ongkir!';
+                badge.className = 'bg-emerald-500/20 text-emerald-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/30';
+                rec.innerHTML = `✅ Total belanjaan Anda sudah memenuhi syarat bebas ongkir. Anda menghemat ongkir sebesar <b>${formatRp(efektivitasOngkir)}</b>!`;
+            } else if (kekurangan <= efektivitasOngkir) {
+                badge.innerText = 'Sangat Disarankan Top-Up';
+                badge.className = 'bg-emerald-500/20 text-emerald-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/30';
+                rec.innerHTML = `💡 <b>Tambah Barang Rp ${formatRp(kekurangan)} Lagi:</b> Daripada bayar ongkir <b>${formatRp(efektivitasOngkir)}</b> tanpa dapat barang, lebih baik beli produk tambahan bermanfaat!`;
+            } else {
+                badge.innerText = 'Langsung Bayar Ongkir';
+                badge.className = 'bg-amber-500/20 text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-500/30';
+                rec.innerHTML = `🛒 Kekurangan belanja terlalu besar (<b>${formatRp(kekurangan)}</b>) dibanding potongan ongkir (<b>${formatRp(efektivitasOngkir)}</b>). Lebih hemat langsung bayar ongkir saja.`;
+            }
+        }
+
+        // --- SMART FRAUD / FAKE DISCOUNT CHECKER ---
+        function runSmartChecker() {
+            const hCoret = parseFloat(document.getElementById('chk-harga-coret').value) || 0;
+            const hPromo = parseFloat(document.getElementById('chk-harga-promo').value) || 0;
+            const hPasar = parseFloat(document.getElementById('chk-harga-pasar').value) || 0;
+
+            const klaimPersen = hCoret > 0 ? ((hCoret - hPromo) / hCoret) * 100 : 0;
+            const realPersen = hPasar > 0 ? ((hPasar - hPromo) / hPasar) * 100 : 0;
+            const markup = hPasar > 0 ? ((hCoret - hPasar) / hPasar) * 100 : 0;
+            const realHemat = hPasar - hPromo;
+
+            document.getElementById('chk-klaim-persen').innerText = klaimPersen.toFixed(0) + '%';
+            document.getElementById('chk-real-persen').innerText = realPersen.toFixed(1) + '%';
+            document.getElementById('chk-markup-val').innerText = (markup > 0 ? '+' : '') + markup.toFixed(1) + '%';
+            document.getElementById('chk-real-hemat').innerText = formatRp(realHemat);
+
+            const badge = document.getElementById('chk-badge');
+            const verdictBox = document.getElementById('chk-verdict-box');
+
+            if (markup > 25) {
+                badge.innerText = 'Diskon Palsu / Mark-Up Tinggi';
+                badge.className = 'bg-rose-500/20 text-rose-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-rose-500/30';
+                verdictBox.className = 'p-3 rounded-xl bg-rose-950/60 border border-rose-700/50 text-xs text-rose-200 leading-relaxed';
+                verdictBox.innerHTML = `🚨 <b>PERINGATAN DISKON PALSU!</b> Toko menaikkan harga coret sebesar <b>${markup.toFixed(0)}%</b> di atas harga pasar. Diskon asli hanya <b>${realPersen.toFixed(1)}%</b>!`;
+            } else if (markup > 5) {
+                badge.innerText = 'Agak Ditinggikan';
+                badge.className = 'bg-amber-500/20 text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-500/30';
+                verdictBox.className = 'p-3 rounded-xl bg-amber-950/50 border border-amber-700/50 text-xs text-amber-200 leading-relaxed';
+                verdictBox.innerHTML = `⚠️ Harga coret sedikit dinaikkan (${markup.toFixed(1)}%). Namun Anda masih menghemat riil sebesar <b>${formatRp(realHemat)}</b> dari harga wajar.`;
+            } else {
+                badge.innerText = 'Diskon Nyata & Wajar';
+                badge.className = 'bg-emerald-500/20 text-emerald-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/30';
+                verdictBox.className = 'p-3 rounded-xl bg-emerald-950/50 border border-emerald-700/50 text-xs text-emerald-200 leading-relaxed';
+                verdictBox.innerHTML = `✅ <b>PROMO ASLI!</b> Tidak ada penggelembutan harga signifikan. Penawaran ini layak untuk dibeli!`;
+            }
+        }
+
+        // --- T&C EVALUATOR ---
+        function evaluateTnc() {
+            const checkboxes = document.querySelectorAll('.tnc-item:checked');
+            let riskPoints = 0;
+
+            checkboxes.forEach(cb => {
+                const risk = cb.getAttribute('data-risk');
+                if (risk === 'high') riskPoints += 3;
+                else if (risk === 'medium') riskPoints += 2;
+                else riskPoints += 1;
+            });
+
+            const title = document.getElementById('tnc-score-title');
+            const desc = document.getElementById('tnc-score-desc');
+            const iconBox = document.getElementById('tnc-score-icon');
+
+            if (riskPoints >= 6) {
+                title.innerText = 'Tingkat Risiko S&K: Sangat Tinggi (Banyak Jebakan)';
+                desc.innerText = 'Banyak batasan tersembunyi. Promo ini berpotensi memberikan manfaat jauh lebih kecil dari ekspektasi.';
+                iconBox.className = 'w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-lg';
+                iconBox.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            } else if (riskPoints >= 3) {
+                title.innerText = 'Tingkat Risiko S&K: Sedang (Perlu Teliti)';
+                desc.innerText = 'Ada beberapa syarat yang membatasi penggunaan promo ini secara fleksibel.';
+                iconBox.className = 'w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg';
+                iconBox.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>';
+            } else {
+                title.innerText = 'Tingkat Risiko S&K: Aman / Transparan';
+                desc.innerText = 'Syarat dan ketentuan tergolong fleksibel dan menguntungkan konsumen.';
+                iconBox.className = 'w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg';
+                iconBox.innerHTML = '<i class="fa-solid fa-check"></i>';
+            }
+        }
+
+        // --- SIDE-BY-SIDE MATRIX COMPARISON ---
+        function updateComparisonMatrix() {
+            const total = parseFloat(document.getElementById('cmp-total-harga').value) || 0;
+
+            // Promo A
+            const valA = parseFloat(document.getElementById('cmp-val-a').value) || 0;
+            const capA = parseFloat(document.getElementById('cmp-cap-a').value) || 0;
+            let saveA = total * (valA / 100);
+            if(capA > 0 && saveA > capA) saveA = capA;
+            const payA = total - saveA;
+
+            // Promo B
+            const valB = parseFloat(document.getElementById('cmp-val-b').value) || 0;
+            const capB = parseFloat(document.getElementById('cmp-cap-b').value) || 0;
+            let saveB = total * (valB / 100);
+            if(capB > 0 && saveB > capB) saveB = capB;
+            const payB = total - saveB;
+
+            // Promo C
+            const saveC = parseFloat(document.getElementById('cmp-val-c').value) || 0;
+            const payC = total - saveC;
+
+            document.getElementById('cmp-res-save-a').innerText = formatRp(saveA);
+            document.getElementById('cmp-res-save-b').innerText = formatRp(saveB);
+            document.getElementById('cmp-res-save-c').innerText = formatRp(saveC);
+
+            document.getElementById('cmp-res-pay-a').innerText = formatRp(payA < 0 ? 0 : payA);
+            document.getElementById('cmp-res-pay-b').innerText = formatRp(payB < 0 ? 0 : payB);
+            document.getElementById('cmp-res-pay-c').innerText = formatRp(payC < 0 ? 0 : payC);
+
+            // Determine Best
+            const saves = [{ id: 'a', val: saveA }, { id: 'b', val: saveB }, { id: 'c', val: saveC }];
+            saves.sort((x, y) => y.val - x.val);
+
+            ['a', 'b', 'c'].forEach(id => {
+                const el = document.getElementById('cmp-rec-' + id);
+                if (id === saves[0].id && saves[0].val > 0) {
+                    el.innerHTML = '<span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full text-[10px] font-extrabold">BEST CHOICE ⭐</span>';
+                } else if (id === saves[1].id) {
+                    el.innerHTML = '<span class="text-slate-500 text-[10px]">Opsi Kedua</span>';
+                } else {
+                    el.innerHTML = '<span class="text-slate-400 text-[10px]">Kurang Menguntungkan</span>';
+                }
+            });
+        }
+
+        // Copy Helper Functions
+        function copySummary(type) {
+            let text = '';
+            if (type === 'bertingkat') {
+                const bayar = document.getElementById('res-bertingkat-bayar').innerText;
+                const efektif = document.getElementById('res-bertingkat-efektif').innerText;
+                const hemat = document.getElementById('res-bertingkat-hemat').innerText;
+                text = `[PromoSmart Summary - Diskon Bertingkat]\nTotal Bayar: ${bayar}\nDiskon Efektif: ${efektif}\nTotal Hemat: ${hemat}\nDihitung via PromoSmart Checker & Calculator.`;
+            } else if (type === 'cashback') {
+                const valA = document.getElementById('res-cb-val-a').innerText;
+                const valB = document.getElementById('res-cb-val-b').innerText;
+                text = `[PromoSmart Summary - Cashback vs Direct]\nNilai Efektif Cashback A: ${valA}\nHemat Diskon Direct B: ${valB}\nDihitung via PromoSmart Checker & Calculator.`;
+            } else {
+                text = `[PromoSmart Summary]\nHasil kalkulasi promo belanja online dihitung secara akurat menggunakan PromoSmart.`;
+            }
+
+            document.execCommand('copy');
+            showToast('Ringkasan promo berhasil disalin!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function updateGlobalStats(latestHemat) {
+            document.getElementById('stat-saved-count').innerText = formatRp(latestHemat);
+            document.getElementById('stat-active-promo').innerText = '1 Promo Active';
+        }
+
+        function resetAllCalculators() {
+            document.getElementById('tb-harga-asli').value = 200000;
+            document.getElementById('tb-diskon-1').value = 50;
+            document.getElementById('tb-diskon-2').value = 20;
+            document.getElementById('tb-diskon-3').value = 0;
+            calculateBertingkat();
+            showToast('Kalkulator berhasil di-reset!');
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            calculateBertingkat();
+            calculateCashback();
+            calculateBuyGet();
+            calculateBundle();
+            calculateOngkir();
+            runSmartChecker();
+            updateComparisonMatrix();
+        };
+    </script>
+</body>
+</html>
